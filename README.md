@@ -29,11 +29,19 @@ This repository contains the curated documentation from that process. No source 
 
 ---
 
+## See the App
+
+Every screen was rebuilt from scratch against [13 UX foundations principles](03-design-system/ux-foundations.md) using a living design system. Browse the [screen gallery](03-design-system/screens/) to see the design system in action — no Figma access needed.
+
+---
+
 ## Start Here
 
-**"I have 5 minutes"** — Read [Case Studies Overview](04-case-studies/README.md). It summarizes 16 features, the measurement model, and key findings.
+**"I have 5 minutes"** — Read [Case Studies Overview](04-case-studies/README.md). The timeline table tells the whole story.
 
 **"I want the technical story"** — Start with [Process Framework](02-process-framework/README.md). It explains the 11-skill architecture, the 10-phase lifecycle, and how they evolved.
+
+**"I want to see the progression"** — Read [Case Studies](04-case-studies/) 01 through 13 in order. Each maps to a framework version (v2.0 through v6.1) and builds on the previous.
 
 **"I want the research"** — Jump to [Research Frontier](05-research/README.md). It covers SoC-on-software architecture, hardware-aware dispatch, and a RISC-V chip design that emerged from the framework.
 
