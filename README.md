@@ -8,7 +8,7 @@
 
 FitMe is an iOS fitness app that unifies training, nutrition, recovery, and body composition into a single privacy-first experience. But the interesting part isn't the app — it's **how it was built**.
 
-Over the course of building FitMe, I developed an AI-assisted product management framework that evolved through 7 major versions. Each version added capabilities — caching, evaluation layers, parallel execution, hardware-aware dispatch — and each was measured against the last. The result is a rare longitudinal dataset: **16 features shipped through the same framework, with honest documentation of both improvements and regressions.**
+Over the course of building FitMe, I developed an AI-assisted product management framework that evolved through 7 major versions. Each version added capabilities — caching, evaluation layers, parallel execution, hardware-aware dispatch — and each was measured against the last. The result is the following dataset: **16 features shipped through the same framework, with honest documentation of both improvements and regressions.**
 
 This repository contains the curated documentation from that process. No source code — just the thinking, the measurements, and the lessons learned.
 
