@@ -206,6 +206,143 @@ A planned v2 addition: on the framework page (`/framework`), add a "Meta" tab th
 
 ---
 
+## Addendum — Features shipped after original publication
+
+The original case study above stopped at the **preview deploy** (commit `5340b31`, 37 commits in). This addendum chronicles what happened between then and the end of the same session — another 31 commits, 4 new routes, 5 major features, and one critical SSR bug caught in production.
+
+### 1. Critical SSR regression — caught and fixed in production
+
+After the preview deploy, the site passed all its smoke tests against the preview URL. It was promoted to production. Then a routine `curl https://fitme-story.vercel.app` revealed the problem: every page was serving ~251 characters of HTML — just the nav and footer. The entire `<main>` was empty in SSR output.
+
+**Root cause:** the root layout wrapped `<PersonaProvider>` in `<Suspense fallback={null}>`. `PersonaProvider` called `usePersona()`, which called `useSearchParams()` synchronously at render time. In Next.js 16, `useSearchParams` suspends during static generation because there's no request URL at build time. Suspense caught it. `fallback={null}` rendered null for the entire children tree. Every static page shipped with empty main content.
+
+**The fix required two architectural changes.** The first attempt — moving `searchParams.get()` into a `useEffect` — wasn't enough; the `useSearchParams()` hook call itself triggers suspension. The working fix split the persona hook into two layers:
+
+- `usePersonaState()` — pure `useState` + `useEffect` + localStorage, no navigation hooks. Safe for SSG. Called by `PersonaProvider`.
+- `PersonaSearchParamsSync` — an inner null-returning component that calls `useSearchParams()`, wrapped in its own `<Suspense fallback={null}>` inside the provider. Suspension is scoped to this tiny component rather than the entire app.
+
+Commit `ab68987`. After this fix, every page's HTML had its full content in SSR output. A timely reminder that preview-URL smoke tests are no substitute for production verification — both URLs had the same bug; the issue only became visible when the author happened to grep HTML content rather than just checking HTTP 200s.
+
+### 2. Post-preview tweaks (6 changes)
+
+After the preview was reviewed, six user-flagged tweaks landed in quick succession (commits `0fcf234` through `5786521`):
+
+- **Dark-mode text contrast fix** — `dark:prose-invert` added to all `prose prose-lg` containers so Tailwind Typography's baked-in light text would flip for dark mode. Without this, body prose on flagship case studies was unreadable in dark mode.
+- **`/about` page refresh** — correct contact email, LinkedIn link added with `rel="noopener noreferrer"`, resume download wired to `/resume.pdf`. The PDF itself was copied from the user's CV folder on disk (`/Volumes/DevSSD/cv version/Product Adoption ManagerV.4 copy.pdf`) into `public/resume.pdf`.
+- **Persona lens wired to Timeline** — the initial implementation had persona pills in the hero but nothing consumed the state. First pass added a `metricLabelByPersona` field on each `FRAMEWORK_VERSIONS` entry with 4 variants (hr / pm / dev / academic) plus a default. `TimelineNode` reads `useCurrentPersona()` and picks the right label. Invisible change at first glance — this was followed by a second pass (see item 5 below) when the user reported they still couldn't see any change.
+- **"Audit in progress" notice** on `/case-studies` — a coral-bordered banner announcing that the site's content is under independent AI audit. Distinct from the standing notice added later in item 6.
+- **Origin narrative rewrite** — the original hero's first beat said "This started as a school project." The user clarified: it's a personal project driven by wanting privacy-first, on-device fitness tracking. The origin beat was rewritten, and a new privacy-focused beat was inserted between beats 2 and 3. The `/about` opening paragraph was also rewritten. `grep "school project"` against `src/` returned zero matches afterward.
+- **Resume PDF** placed at `public/resume.pdf`, download link on `/about` now works.
+
+### 3. Production promotion
+
+Once the preview was tweaked and reviewed, the site was formally promoted with `vercel --prod`. Production URL: `https://fitme-story.vercel.app`. Vercel auto-deploy on push to main stayed on from this point forward — every subsequent commit auto-deployed within 60 seconds.
+
+### 4. Real Lighthouse measurement + accessibility fixes
+
+With the site live, real Lighthouse measurements replaced the pre-deploy static audit. Results across 6 probes (homepage, flagship, light-tier case study × mobile + desktop):
+
+- Mobile homepage: **95/100/100/100** (perf/a11y/best/SEO) after initial fixes — met the 95+ target
+- Desktop scores: **97–100** on performance across all 3 routes
+- One miss: desktop perf on `/case-studies/full-system-audit` at 94, driven by CLS on long content
+
+**Two a11y findings were fixed in response.** The first pass (commit `baa7d30`) addressed dark-mode color contrast on timeline nodes and NumbersPanel — `--color-neutral-500` was too dim at `#78716C` on the dark `#1C1917` background (3.64 ratio, needs 4.5). Overrode in dark mode to `#A8A29E` + lighter variants for indigo and coral. Also added explicit `min-h-[44px]` on SiteHeader nav links and Timeline filter buttons to pass the target-size audit.
+
+**A secondary font-fallback experiment** (commit `0ae691b`) — switched `next/font` `display` strategy from `swap` to `fallback` to reduce CLS on font load. Resulted in a 1-point mobile perf bump (95 → 96) and marginal desktop improvement. Net positive, no regression.
+
+Homepage mobile after both passes: **95+/100/100/100**. The 94 desktop perf on full-system-audit was left as-is — 1 point below the self-imposed 95 target is not worth 20+ minutes of CLS chasing on a portfolio site.
+
+### 5. Persona lens, take two — making reshaping visible
+
+The first persona-wiring pass (item 2 above) was functionally correct but too subtle: only the small 9pt gray metric label at the bottom of each timeline node changed when a persona was selected. The user couldn't see any visible change and reported it as a bug.
+
+The bug wasn't in the code — it was in the UX ambition. Four new surfaces were added to make persona selection **visibly reshape the page**:
+
+- **`<PersonaIndicator>`** — a coral-accented "You're reading as [persona]" banner appears below the hero pills when a persona is selected, with `role="status"` + `aria-live="polite"` for screen readers. A `×` button clears the persona.
+- **`<HeroSubtitle>`** — the hero's subtitle text rotates between 5 variants (default + 4 personas). HR sees "16 features shipped. 185 audit findings published. Measured outcomes, honest regressions — ready for an interview about any of them." Devs see "From SoC-on-software to hardware-aware dispatch — an AI-orchestrated PM framework explained floor by floor, with real code behind every claim." Each persona gets its own framing of the same content.
+- **NumbersPanel per-persona labels** — all 5 metrics and the footer-line R²=0.82 callout rotate through 5 variants. "features shipped" becomes "shipping outcomes" (HR), "tracked features" (PM), "features in the dataset" (dev), "normalized data points" (academic).
+- **Timeline metric labels** from pass 1 stayed in place.
+
+Net effect: clicking the HR pill now produces 4 distinct visible changes on the homepage (indicator, subtitle, 5 metric labels, timeline labels). The page visibly "hears" the reader.
+
+Commit `8a03858`.
+
+### 6. `/trust` page groundwork
+
+A new standing notice route at `/trust` — distinct from the time-limited "audit in progress" banner on `/case-studies`. The `/trust` page explains the site's honesty program: factual accuracy checks, no cherry-picked data, honest-about-failures claims, no silent edits to historical numbers. Three TODO markers visible in coral are placeholders for the user to fill in: which AI models audit, what cadence, and a link to the first completed audit report.
+
+Added a "How this site stays honest →" link to the site footer. Route: `https://fitme-story.vercel.app/trust`. Commit `60c60ec`.
+
+### 7. Glossary feature
+
+30-entry glossary at `/glossary`, plus an inline `<Term>` MDX component that shows a hover tooltip and links to the dedicated entry. Four categories: hardware analogs (SoC, LoRA hot-swap, palettization, big.LITTLE, ANE, UMA, speculative preload, TPU, Mahalanobis, systolic chain), framework components (pm-workflow, dispatch intelligence, skill-on-demand, cache tiers, hub-and-spoke, HADF, CU, phase timing, parallel write safety, eval layer, snapshot/rollback, task complexity gate, batch dispatch, result forwarding), methodology (case-study monitoring, normalization, audit findings), and web vitals (LCP, CLS, SSG).
+
+`<Term>` uses dotted-coral underline as the "I'm glossary-linkable" cue, a small framer-motion popover on hover/focus, `role="tooltip"` + `aria-describedby`, keyboard-accessible. Seeded on homepage (NumbersPanel's "CU formula" wrapped) and on `/framework/dispatch` (wrapping `/pm-workflow`, "cache tiers", "systolic chain").
+
+The motivation was direct: the site used heavy hardware-to-software jargon (SoC, systolic, Mahalanobis, LoRA) that carried zero meaning to HR or PM readers. Without a glossary, those terms were speed bumps. With the glossary, they're learnable without leaving the page.
+
+Commit `96d5da1`. Route: `https://fitme-story.vercel.app/glossary`.
+
+### 8. Live Dispatch Demo
+
+Evolution of the static `<BlueprintOverlay>`. `<DispatchReplay>` is an animated example of the framework in action — a feature enters, floors light up in the order they fire, arrows show data-flow, and dormant floors are visibly dimmed so readers can see which layers stayed off.
+
+Two traces ship in v1:
+- **Sprint I** (v2.0 case study) — 10 mechanical UI/DS fixes. Routes to LITTLE core, loads only `design` + `dev` skills, systolic chain inner loop, ~8 beats. The trace you'd expect for "boring mechanical work."
+- **fitme-story build itself** (meta-recursion) — watching the framework build the site that's replaying it. 7 beats covering classification, skill chain, on-demand loading, batched dispatch, measurement, and write-back. "45 CU at 2.7 min/CU — framework all-time best" appears as a metric in beat 6.
+
+Interaction: scroll-driven by default (IntersectionObserver picks the active beat based on which beat is closest to viewport center), plus a floating "▶ Auto-play" pill that advances beats every 2.5 seconds. Click a beat card to jump to it. Sticky trace switcher at top.
+
+Floor states: firing (full color + glow + "▸ executing"), done (full opacity + "✓ done"), dormant (35% opacity + "— dormant —"). The dormant state is the pedagogical point — readers literally see which floors the framework skipped.
+
+Mounted in two places: standalone `/framework/dispatch` (for a dedicated URL) and inline on `/case-studies/soc-on-software` (below the static BlueprintOverlay). A "See the framework in motion →" card on `/framework` links to the standalone.
+
+Commit `c499a6c`. Route: `https://fitme-story.vercel.app/framework/dispatch`.
+
+### 9. PM-flow ecosystem page
+
+A new `/pm-flow` page — the biggest post-original feature. Zooms into Floor 2 of the blueprint (the skill ecosystem) with seven sections:
+
+- **Hero** with 6 anchor chips
+- **Lifecycle Loop** — concentric 2-ring SVG. Inner ring has 10 phases arranged clockwise (P0 Research at 12 o'clock, continuing through P9 Learn). Each phase is a colored pip tinted by its owning skill. A coral feedback arc curves from P9 back to P0 with a 4-second breathing pulse — the "this loops forever" signal. Outer ring has 3 arc segments for cx, ops, and marketing — the feedback-layer skills that continuously feed information into the cycle rather than owning a single phase.
+- **Lego Wall** — 11 colored bricks representing the skills. Toggle "Scattered ↔ Assembled" triggers a framer-motion `layout` animation: bricks fly from a loose grid into 10 phase columns (+ an "always-on row" below for cross-phase skills). Click any brick → rotateY flip to a detail panel showing purpose, sub-commands, invokes/invoked-by chips (clickable to flip to that skill), standalone example, and full docs link.
+- **Evolution strip** — 6 milestones (v1 monolith → v6.1 HADF), each tinted by the skills added.
+- **Shared Data Layer** — 15-tile grid of the JSON files in `.claude/shared/`, each tile showing colored dots for the skills that read it and the skills that write it. Readers see ownership at a glance.
+- **Cache tiers** — L1/L2/L3 with the CPU-cache analogy.
+- **Build your own** — 3 bullets + 3 related-page cards.
+
+The **per-skill color palette** was registered as 11 CSS variables (`--skill-pm-workflow` through `--skill-release`) in `globals.css`. Tailwind's -500 family for WCAG-accessibility. Colors carry through consistently — the same rose color for `/cx` appears on its Lego brick, its outer-ring arc in the loop, and its read/write dots in the data-layer tiles.
+
+**Visual grammar on each brick:** 6px left accent stripe (the skill's color), a small colored dot next to the skill name, subtle hover-tint at 10% alpha of the skill color. Decorative color, always accompanied by text — colorblind-safe.
+
+**Accessibility iteration:** first Lighthouse pass on `/pm-flow` scored 90/100 a11y (target 95). Four specific audit failures: color-contrast on back-face brick accent (2.78 ratio for indigo on dark bg), target-size on SkillChip buttons (19px tall, need 24px), aria-prohibited-attr on `<span aria-label>` inside SharedDataTiles (50 violations), and label-content-name-mismatch on LegoBrick buttons (visible text vs aria-label divergence). A targeted fix (commit `8f4f918`) replaced accent text color with neutral + accent-as-underline, bumped chip buttons to `min-h-[24px]`, added `role="img"` to the skill dots, and removed the redundant aria-label from the brick buttons. Final a11y: **100/100**.
+
+Built in 5 phases across 18 planned tasks, ~1.5 hours of focused work with 5 subagent dispatches. Commits `c6fa0ed` through `8f4f918`.
+
+Route: `https://fitme-story.vercel.app/pm-flow`.
+
+### Updated session totals
+
+| Metric | At preview deploy | At session end |
+|--------|-------------------|----------------|
+| Commits on main | 37 | **68** |
+| Pre-rendered routes | 36 | **40** (`/trust`, `/framework/dispatch`, `/glossary`, `/pm-flow` added) |
+| Major interactive components | 3 flagship (BlueprintOverlay, ChipAffinityMap, PhaseTimingChart) | **7** (+ DispatchReplay, LifecycleLoop, LegoWall, Term) |
+| Cumulative insertions / deletions | 20,983 / 3,216 | **23,510 / 3,289** |
+| Hand-written TypeScript LOC (src/ + scripts/) | 1,890 | **4,318** |
+| Content MDX files synced | 42 | 42 (unchanged) |
+| Unit tests | 12 passing | 12 passing (no new tests this continuation) |
+| Subagent dispatches | ~23 | **~45** (~22 additional across the 5 continuation features) |
+| Lighthouse a11y (mobile homepage) | not measured pre-deploy | **100/100** |
+| Lighthouse performance (mobile homepage) | not measured pre-deploy | **96/100** |
+| Critical production bugs caught | 0 (pre-deploy) | **1** (SSR regression, fixed same session) |
+
+### Features from the continuation that deserve their own future case studies
+
+Several of the continuation features — especially `/pm-flow` with its Lego-metaphor visualization and the Live Dispatch Demo with its scroll-driven replay — are substantial enough to warrant their own standalone case studies. The design decisions behind the concentric-ring lifecycle loop, the assembled-vs-scattered layout grammar, and the per-skill color palette all have their own stories worth telling. For now they're subsumed into this addendum; if there's future demand, each could be promoted to a flagship case study in the showcase repo.
+
+---
+
 ## Bottom line
 
 Three things this build confirmed about the PM framework at this version:
