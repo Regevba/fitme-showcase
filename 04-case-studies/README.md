@@ -45,6 +45,9 @@ Six case studies that take a single decision, bug, or component and examine it i
 | 18 | [Two Project-Wide Rules Born in One Refactor](18-home-today-screen.md) | Rules emerge from features | How Home v2 codified the V2 Rule and the screen-prefixed analytics convention |
 | 19 | [The Biggest Screen Ran the Fastest](19-training-plan-v2.md) | Scale | A 2,135-line monolith shipped in 5 hours with the best complexity-normalized velocity of any v2 pass |
 | 20 | [185 Findings, 100% In-Project Closure](20-audit-remediation-program.md) | Audit → Remediation | The first time the framework was used to close findings from its own audit — 6 sprints, 183/185 closed, 2 deferred on documented external blockers |
+| 21 | [Smart Reminders — Four Features in 12 Hours](21-smart-reminders.md) | Stress test | 5-guard notification scheduler shipped as 1 of 4 features during the v5.1 parallel stress test; surfaced a PM-hygiene gap in stress-test mode |
+| 22 | [Shipped Without a Door](22-push-notifications.md) | Shipped-not-live | The priming view shipped tested and merged, but no entry point was ever wired — the feature that documents "complete" ≠ "reachable" |
+| 23 | [Phase-Complete Is Not Feature-Live](23-import-training-plan.md) | Archival vs deletion | Parser stack + 23 tests shipped cleanly; entry-point views annotated HISTORICAL three days later. Archive rather than delete — preserves the revival path |
 
 ---
 
