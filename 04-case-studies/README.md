@@ -44,6 +44,7 @@ Six case studies that take a single decision, bug, or component and examine it i
 | 17 | [Lego as PM-Flow Metaphor](17-lego-pmflow.md) | Pedagogy | The metaphor that unlocked the mental model for the framework's ecosystem |
 | 18 | [Two Project-Wide Rules Born in One Refactor](18-home-today-screen.md) | Rules emerge from features | How Home v2 codified the V2 Rule and the screen-prefixed analytics convention |
 | 19 | [The Biggest Screen Ran the Fastest](19-training-plan-v2.md) | Scale | A 2,135-line monolith shipped in 5 hours with the best complexity-normalized velocity of any v2 pass |
+| 20 | [185 Findings, 100% In-Project Closure](20-audit-remediation-program.md) | Audit → Remediation | The first time the framework was used to close findings from its own audit — 6 sprints, 183/185 closed, 2 deferred on documented external blockers |
 
 ---
 
