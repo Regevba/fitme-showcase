@@ -1,10 +1,10 @@
 # Act 4: Case Studies — The Framework Evolution, Told in Data
 
-> 13 features. One complexity model. A linear timeline that traces how an AI-assisted PM framework evolved from a 6.5-hour pilot to hardware-aware dispatch — with honest measurements at every step.
+> 13 framework milestones plus 6 engineering deep dives. One complexity model. A linear timeline that traces how an AI-assisted PM framework evolved from a 6.5-hour pilot to hardware-aware dispatch — with honest measurements at every step.
 
 ## Context
 
-These case studies document the evolution of an AI-assisted PM framework across 17 features built over 4 weeks. Unlike typical "we shipped fast" narratives, every claim here is backed by a normalized complexity metric (Complexity Units, or CU) that accounts for task count, work type, and difficulty factors like auth integration, UI complexity, and architectural novelty. The result: apples-to-apples velocity comparisons across features of wildly different scope.
+These case studies document the evolution of an AI-assisted PM framework across 19 features built over 4 weeks. Unlike typical "we shipped fast" narratives, every claim here is backed by a normalized complexity metric (Complexity Units, or CU) that accounts for task count, work type, and difficulty factors like auth integration, UI complexity, and architectural novelty. The result: apples-to-apples velocity comparisons across features of wildly different scope.
 
 **Read them in order.** The numbering follows the framework's version timeline — v2.0 through v6.1. Each study builds on the previous, and the progression from "manual and slow" to "parallel, measured, and hardware-aware" is the point.
 
@@ -29,6 +29,21 @@ The measurement methodology is described in [How We Normalized Complexity Across
 | 11 | [Stopped Estimating, Started Measuring](11-measurement-v6.md) | v6.0 | Self-awareness | 7 of 9 metrics moved from estimated to deterministic |
 | 12 | [Hardware-Aware Dispatch](12-hadf.md) | v6.1 | Hardware | 17 chip profiles + 7 cloud signatures in 120 min |
 | 13 | [185 Findings Full-System Audit](13-full-system-audit.md) | v6.1 | Audit | 185 findings, 12 critical, honest self-referential bias report |
+
+---
+
+## Engineering Deep Dives
+
+Six case studies that take a single decision, bug, or component and examine it in depth — complementing the version-timeline arc above with engineering-level detail.
+
+| # | Case Study | Story Beat | Why It Earns Its Own Study |
+|---|-----------|------------|-----------------------------|
+| 14 | [Framework Story Site Meta-Build](14-framework-story-site.md) | Meta-recursion | The site describing the framework, built by the framework it describes |
+| 15 | [SSR Regression Post-Mortem](15-ssr-regression.md) | Debugging | Blank-main production bug, root cause, fix, and guardrail added |
+| 16 | [DispatchReplay Component](16-dispatchreplay.md) | Design-to-code | How a scroll-interactive trace-replay component was specified and built |
+| 17 | [Lego as PM-Flow Metaphor](17-lego-pmflow.md) | Pedagogy | The metaphor that unlocked the mental model for the framework's ecosystem |
+| 18 | [Two Project-Wide Rules Born in One Refactor](18-home-today-screen.md) | Rules emerge from features | How Home v2 codified the V2 Rule and the screen-prefixed analytics convention |
+| 19 | [The Biggest Screen Ran the Fastest](19-training-plan-v2.md) | Scale | A 2,135-line monolith shipped in 5 hours with the best complexity-normalized velocity of any v2 pass |
 
 ---
 
