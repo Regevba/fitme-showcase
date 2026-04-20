@@ -48,6 +48,7 @@ Six case studies that take a single decision, bug, or component and examine it i
 | 21 | [Smart Reminders — Four Features in 12 Hours](21-smart-reminders.md) | Stress test | 5-guard notification scheduler shipped as 1 of 4 features during the v5.1 parallel stress test; surfaced a PM-hygiene gap in stress-test mode |
 | 22 | [Shipped Without a Door](22-push-notifications.md) | Shipped-not-live | The priming view shipped tested and merged, but no entry point was ever wired — the feature that documents "complete" ≠ "reachable" |
 | 23 | [Phase-Complete Is Not Feature-Live](23-import-training-plan.md) | Archival vs deletion | Parser stack + 23 tests shipped cleanly; entry-point views annotated HISTORICAL three days later. Archive rather than delete — preserves the revival path |
+| 24 | [Six Features That Didn't Earn a Case Study](24-backlog-features-roundup.md) | Honest accounting | When the case-study-every-feature rule meets six features that either pre-dated it or were research-only — a three-condition threshold emerges |
 
 ---
 
