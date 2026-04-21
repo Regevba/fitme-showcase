@@ -1,6 +1,6 @@
 # The Drift That Detected Itself
 
-> A single deep audit uncovered seven features whose state files had been silently wrong for days — median four, worst eleven. The fix for those seven was a one-time batch. The fix for *the pattern* became version 6.2: a 72-hour recurring audit that checks every feature's self-report against reality, commits a snapshot ledger to git, and auto-opens an issue on any regression.
+> A single deep audit uncovered seven features whose state files had been silently wrong for days — median four, worst eleven. The fix for those seven was a one-time batch. The fix for *the pattern* became version 7.1: a 72-hour recurring audit that checks every feature's self-report against reality, commits a snapshot ledger to git, and auto-opens an issue on any regression.
 
 ## Context
 
@@ -10,7 +10,7 @@ The silent failure mode: what happens when the code ships but nobody updates the
 
 The 2026-04-20 open-items audit caught seven features in that exact state. Some had drifted for eleven days. The batch reconcile for those seven was a few hours of work. The question the audit left open was how to not get back into this position next month.
 
-v6.2 is the answer.
+v7.1 is the answer.
 
 ## What It Does
 
@@ -85,5 +85,5 @@ Cost: ~50KB per snapshot × ~10/month = ~6MB/year. Negligible in a repo with thi
 - **A one-time audit that finds a systemic drift pattern should convert to an automated cycle, not stay as a one-off.** Without the cycle, the 2026-04-20 findings would recur under new feature names in the next audit window.
 - **Cadence follows data, not intuition.** The 72h rhythm was chosen because three independent drift metrics (median, max, accumulation rate) converged on it. Other projects would find a different cadence from their own data.
 - **Framework-level regressions should auto-open issues, not fail CI.** CI gates merges; integrity cycles gate steady state. Different authority loops — a state.json drift isn't a merge blocker, it's a hygiene event.
-- **Version bumps should require a capability change, not a point improvement.** v6.2 adds a new class of behavior (recurring self-observation) whose trigger isn't a feature action. That's the bar — "is this a new kind of thing?" — not "is this a better version of an existing thing?"
-- **The cycle found itself first.** The audit that motivated v6.2 was the same kind of artifact v6.2 now produces every 72 hours. Every cycle after the first one reads the previous cycle's snapshot as part of its diff — the detector is its own input. The framework has started observing itself.
+- **Version bumps should require a capability change, not a point improvement.** v7.1 adds a new class of behavior (recurring self-observation) whose trigger isn't a feature action. That's the bar — "is this a new kind of thing?" — not "is this a better version of an existing thing?"
+- **The cycle found itself first.** The audit that motivated v7.1 was the same kind of artifact v7.1 now produces every 72 hours. Every cycle after the first one reads the previous cycle's snapshot as part of its diff — the detector is its own input. The framework has started observing itself.

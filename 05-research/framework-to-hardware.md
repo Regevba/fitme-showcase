@@ -14,7 +14,7 @@ This document maps the complete genealogy.
 | 2000s | Configurable cores + memory compression | v5.0 | Skill-on-demand loading (configurable function units) + cache compression (hardware scratchpad with decompression). First architectural leap: 54K tokens reclaimed, overhead dropped 63%. |
 | 2010s | Heterogeneous multi-core + speculation | v5.1 | Batch dispatch (systolic array scheduling), result forwarding (UMA zero-copy), model tiering (big.LITTLE heterogeneous cores), speculative preloading (branch prediction). Eight SoC-inspired optimizations shipped in a single release. |
 | 2020s | Intelligent scheduling + coherence | v5.2 | Dispatch intelligence (CPU decode/scheduler with scoring) + parallel write safety (MESI-inspired coherence protocol). The framework became self-aware about task complexity and agent coordination. |
-| Research frontier | Self-aware adaptive hardware | v6.1 (HADF) | Hardware-aware dispatch: the framework detects and adapts to the actual hardware at both ends (device + cloud). Like a chip that reconfigures itself based on workload characteristics. |
+| Research frontier | Self-aware adaptive hardware | v7.0 (HADF) | Hardware-aware dispatch: the framework detects and adapts to the actual hardware at both ends (device + cloud). Like a chip that reconfigures itself based on workload characteristics. |
 
 ## The Component-Level Mapping
 

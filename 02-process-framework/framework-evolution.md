@@ -1,4 +1,4 @@
-# From Serial Pipeline to Hardware-Aware Dispatch -- Framework Evolution v1.0 to v6.1
+# From Serial Pipeline to Hardware-Aware Dispatch -- Framework Evolution v1.0 to v7.0
 
 ## Context
 
@@ -23,7 +23,7 @@ This document traces the evolution of an AI-orchestrated product management fram
 | **v5.1** | **Apr 14** | **8 SoC items: batch, tiering, forwarding, preload, systolic, complexity gate** | AI Engine Architecture (13 tasks) |
 | v5.2 | Apr 16 | Dispatch Intelligence + Parallel Write Safety | 4-feature stress test |
 | **v6.0** | **Apr 16** | **Framework Measurement: deterministic timing, cache tracking, eval gates** | Full measurement pass |
-| v6.1 | Apr 16 | Hardware-Aware Dispatch: 17 chip profiles, cloud fingerprinting | Research validation |
+| v7.0 | Apr 16 | Hardware-Aware Dispatch: 17 chip profiles, cloud fingerprinting | Research validation |
 
 ---
 
@@ -200,7 +200,7 @@ Deterministic instrumentation of the framework itself:
 
 ---
 
-## v6.1: Hardware-Aware Dispatch (HADF)
+## v7.0: Hardware-Aware Dispatch (HADF)
 
 5-layer hardware detection architecture:
 

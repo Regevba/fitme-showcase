@@ -6,7 +6,7 @@
 
 These case studies document the evolution of an AI-assisted PM framework across 19 features built over 4 weeks. Unlike typical "we shipped fast" narratives, every claim here is backed by a normalized complexity metric (Complexity Units, or CU) that accounts for task count, work type, and difficulty factors like auth integration, UI complexity, and architectural novelty. The result: apples-to-apples velocity comparisons across features of wildly different scope.
 
-**Read them in order.** The numbering follows the framework's version timeline — v2.0 through v6.1. Each study builds on the previous, and the progression from "manual and slow" to "parallel, measured, and hardware-aware" is the point.
+**Read them in order.** The numbering follows the framework's version timeline — v2.0 through v7.0. Each study builds on the previous, and the progression from "manual and slow" to "parallel, measured, and hardware-aware" is the point.
 
 The measurement methodology is described in [How We Normalized Complexity Across 16 Different Features](normalization-model.md), and independently validated in [External Validation](meta-analysis-validation.md).
 
@@ -27,8 +27,8 @@ The measurement methodology is described in [How We Normalized Complexity Across
 | 9 | [What Breaks at Scale — and the Fix](09-dispatch-intelligence.md) | v5.2 | Learning | Tool usage -48%, variance -84%, review gate catches real bugs |
 | 10 | [From Luck to Design](10-parallel-write-safety.md) | v5.2 | Safety | Deterministic file isolation, self-improving region detection |
 | 11 | [Stopped Estimating, Started Measuring](11-measurement-v6.md) | v6.0 | Self-awareness | 7 of 9 metrics moved from estimated to deterministic |
-| 12 | [Hardware-Aware Dispatch](12-hadf.md) | v6.1 | Hardware | 17 chip profiles + 7 cloud signatures in 120 min |
-| 13 | [185 Findings Full-System Audit](13-full-system-audit.md) | v6.1 | Audit | 185 findings, 12 critical, honest self-referential bias report |
+| 12 | [Hardware-Aware Dispatch](12-hadf.md) | v7.0 | Hardware | 17 chip profiles + 7 cloud signatures in 120 min |
+| 13 | [185 Findings Full-System Audit](13-full-system-audit.md) | v7.0 | Audit | 185 findings, 12 critical, honest self-referential bias report |
 
 ---
 
@@ -49,7 +49,7 @@ Six case studies that take a single decision, bug, or component and examine it i
 | 22 | [Shipped Without a Door](22-push-notifications.md) | Shipped-not-live | The priming view shipped tested and merged, but no entry point was ever wired — the feature that documents "complete" ≠ "reachable" |
 | 23 | [Phase-Complete Is Not Feature-Live](23-import-training-plan.md) | Archival vs deletion | Parser stack + 23 tests shipped cleanly; entry-point views annotated HISTORICAL three days later. Archive rather than delete — preserves the revival path |
 | 24 | [Six Features That Didn't Earn a Case Study](24-backlog-features-roundup.md) | Honest accounting | When the case-study-every-feature rule meets six features that either pre-dated it or were research-only — a three-condition threshold emerges |
-| 25 | [The Drift That Detected Itself](25-integrity-cycle.md) | v6.2 self-observation | A one-time audit uncovered 7 state-file lies spanning up to 11 days. v6.2 converts that audit into a 72-hour recurring cycle — the first framework capability whose trigger is wall-clock elapsed, not a feature action |
+| 25 | [The Drift That Detected Itself](25-integrity-cycle.md) | v7.1 self-observation | A one-time audit uncovered 7 state-file lies spanning up to 11 days. v7.1 converts that audit into a 72-hour recurring cycle — the first framework capability whose trigger is wall-clock elapsed, not a feature action |
 
 ---
 
