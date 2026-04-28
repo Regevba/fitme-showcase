@@ -10,7 +10,10 @@ FitMe is an iOS fitness app that unifies training, nutrition, recovery, and body
 
 Over the course of building FitMe, I developed an AI-assisted product management framework that evolved through 7 major versions. Each version added capabilities — caching, evaluation layers, parallel execution, hardware-aware dispatch — and each was measured against the last. The result is the following dataset: **16 features shipped through the same framework, with honest documentation of both improvements and regressions.**
 
-This repository contains the curated documentation from that process. No source code — just the thinking, the measurements, and the lessons learned.
+This repository is the **audit-level corpus** of that process. No source code — just the thinking, the measurements, and the lessons learned.
+
+> **How this repo relates to fitme-story.vercel.app:**
+> Curated, public-facing storytelling lives at [fitme-story.vercel.app](https://fitme-story.vercel.app). This repo is the comprehensive, plain-markdown audit trail behind it. Layer 1 (`#01–#25`) is curated for narrative clarity; Layer 2 (`#26–#47` + `04-case-studies/meta-analysis/`) is a verbatim mirror of the upstream FitTracker2 case-study folder — same content, same filenames, no edits. Read fitme-story for the polished story; read here to verify any claim against source.
 
 ---
 
@@ -19,7 +22,8 @@ This repository contains the curated documentation from that process. No source 
 | Metric | Value |
 |---|---|
 | Features shipped | 16 (through the PM framework) |
-| Framework versions | 7 (v2.0 → v7.0) |
+| Framework versions | 8 (v2.0 → v7.7, with v7.5–v7.7 as the data-integrity trilogy) |
+| Case studies | 25 curated + 22 audit-level mirrored + 8 meta-analysis = 55 total |
 | Serial velocity improvement | ~5.6x (measured in min/CU) |
 | Parallel throughput | 12.4x vs baseline (4 features in 54 minutes) |
 | Full-system audit findings | 185 (12 critical, 49 high — documented, not hidden) |

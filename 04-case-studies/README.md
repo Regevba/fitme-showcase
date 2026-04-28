@@ -1,6 +1,13 @@
 # Act 4: Case Studies — The Framework Evolution, Told in Data
 
-> 13 framework milestones plus 6 engineering deep dives. One complexity model. A linear timeline that traces how an AI-assisted PM framework evolved from a 6.5-hour pilot to hardware-aware dispatch — with honest measurements at every step.
+> 13 framework milestones plus 12 engineering deep dives, followed by an audit-level mirror of every case study upstream. One complexity model. A linear timeline that traces how an AI-assisted PM framework evolved from a 6.5-hour pilot to hardware-aware dispatch — with honest measurements at every step.
+
+**Two layers in this folder, by design.**
+
+- **#01–#25 (curated):** rewritten for narrative clarity, ~35% shorter than upstream, self-contained for outside readers.
+- **#26–#47 + `meta-analysis/`:** verbatim mirror of `FitTracker2/docs/case-studies/` for audit-level fidelity. Filenames track upstream slugs; content is unedited.
+
+Curation for the public site (fitme-story.vercel.app) draws from this superset; the showcase repo is the comprehensive corpus.
 
 ## Context
 
@@ -74,6 +81,74 @@ The model fits a power law with R-squared = 0.87, suggesting the improvement cur
 | [Normalization Model](normalization-model.md) | The CU complexity formula, factor definitions, and retroactive normalization of all 16 features |
 | [ROI Retrospective](meta-analysis.md) | What-if analysis: had we instrumented measurement from day one, what would we have learned earlier? |
 | [External Validation](meta-analysis-validation.md) | Independent review confirming arithmetic consistency, identifying measurement gaps, and recommending next steps |
+| [Data Quality Tiers](data-quality-tiers.md) | T1 (Instrumented) / T2 (Declared) / T3 (Narrative) labeling convention. Every quantitative claim in a case study, PRD, or meta-analysis must carry one |
+| [Case Study Template](case-study-template.md) | Canonical template for new case studies (frontmatter, sections, tier tags) |
+| [PM-Workflow Skill](pm-workflow-skill.md) | The skill that orchestrates the 9-phase lifecycle |
+| [FitTracker Evolution Walkthrough](fittracker-evolution-walkthrough.md) | Chronological narrative of the codebase's evolution |
+| [UI-Audit Baseline Burndown](ui-audit-baseline-burndown.md) | Hard-gate burndown of the 27 P0 design-system findings |
+
+---
+
+## Audit-Level Mirror (#26–#47)
+
+Verbatim mirror of `FitTracker2/docs/case-studies/*.md` for case studies that don't have a curated #01–#25 entry. Ordered by git creation date.
+
+### UCC + Operations (April 13)
+
+| # | Case Study | Topic |
+|---|-----------|-------|
+| 26 | [Cleanup + Operations Control Room](26-cleanup-control-room.md) | Maintenance + UCC-adjacent ops surface |
+| 27 | [Control Center IA Refresh](27-control-center-alignment-ia-refresh.md) | UCC information-architecture realignment |
+
+### Audit Remediation Track (April 17–20)
+
+| # | Case Study | Topic |
+|---|-----------|-------|
+| 28 | [Audit Remediation (early)](28-audit-remediation.md) | Early-stage remediation pass that preceded the 185-findings program |
+| 29 | [Orchid AI Accelerator](29-orchid-ai-accelerator.md) | 26K+ design-space runs; foundation for v7.0 HADF |
+| 30 | [Audit v2 — Concurrent Stress Test](30-audit-v2-concurrent-stress-test.md) | Concurrent dispatch stress test; surfaced framework bugs F1–F9 |
+| 31 | [Audit v2 — G1 UI](31-audit-v2-g1-ui.md) | Group 1: UI surface findings |
+| 32 | [Audit v2 — G2 Tests](32-audit-v2-g2-tests.md) | Group 2: test infrastructure findings |
+| 33 | [Audit v2 — G3 AI](33-audit-v2-g3-ai.md) | Group 3: AI engine findings |
+| 34 | [Audit v2 — G4 Backend](34-audit-v2-g4-backend.md) | Group 4: backend findings |
+| 35 | [Audit v2 — G5 Design System](35-audit-v2-g5-ds.md) | Group 5: design-system findings |
+| 36 | [Audit v2 — G6 Config](36-audit-v2-g6-config.md) | Group 6: config / build findings |
+| 37 | [M-1 Settings Decomposition](37-m-1-settings-decomposition.md) | 1170-line monolith → 294 lines + 8 new files |
+| 38 | [M-2 MealEntrySheet Decomposition](38-m-2-mealentrysheet-decomposition.md) | 1104 → 140 lines (~87% reduction); 17 @State vars → 0 |
+| 39 | [M-3 Design System Completion](39-m-3-design-system-completion.md) | Token pipeline 60% → 100%; 29 → 38 dark-mode colorsets |
+| 40 | [Post-Stress-Test Audit Remediation](40-post-stress-test-audit-remediation.md) | 21 PRs (#96–#116), 50 audit findings closed, F1–F9 documented |
+| 41 | [M-4 XCUITest Infrastructure](41-m-4-xcuitest-infrastructure.md) | First M-series feature with attempt-1 abort + plan-addendum recovery |
+| 42 | [Original README Redesign](42-original-readme-redesign.md) | Top-level README rewrite for project framing |
+
+### Data Integrity Trilogy (April 24–27)
+
+| # | Case Study | Topic |
+|---|-----------|-------|
+| 43 | [Data Integrity Framework v7.5](43-data-integrity-framework-v7-5.md) | Eight cooperating defenses born from the Gemini audit |
+| 44 | [Mechanical Enforcement v7.6](44-mechanical-enforcement-v7-6.md) | 7 Class B → A promotions; per-PR review bot + weekly cron |
+| 46 | [Validity Closure v7.7](46-framework-v7-7-validity-closure.md) | 5 new gates + advisory; closes A1–A5 + B1–B2 + C1 |
+
+### Paused / In-Progress (April 27)
+
+| # | Case Study | Topic |
+|---|-----------|-------|
+| 45 | [Auth Polish v2](45-auth-polish-v2.md) | Paused 2026-04-28 post-A1 (stub) |
+| 47 | [Onboarding v2 Retroactive](47-onboarding-v2-retroactive.md) | Retroactive PM-workflow application to onboarding v2 (stub) |
+
+### Meta-Analysis Subfolder
+
+Verbatim mirror of `FitTracker2/docs/case-studies/meta-analysis/`:
+
+| Document | What It Covers |
+|----------|---------------|
+| [README](meta-analysis/README.md) | Subfolder index |
+| [Independent Audit — Gemini 2.5 Pro](meta-analysis/independent-audit-2026-04-21-gemini.md) | Source trigger for the v7.5 framework bump |
+| [Meta-Analysis 2026-04-21](meta-analysis/meta-analysis-2026-04-21.md) | Cross-feature synthesis |
+| [Meta-Analysis Validation 2026-04-16](meta-analysis/meta-analysis-validation-2026-04-16.md) | Verbatim source of the curated [meta-analysis-validation.md](meta-analysis-validation.md) |
+| [What If V6 From Day One](meta-analysis/what-if-v6-from-day-one-2026-04-16.md) | Verbatim source of the curated [meta-analysis.md](meta-analysis.md) |
+| [V7.5 Advancement Report](meta-analysis/v7-5-advancement-report.md) | Tier-by-tier closure status |
+| [Tier-Tag Checker Baseline](meta-analysis/tier-tag-checker-baseline.md) | Baseline measurement of T1/T2/T3 compliance |
+| [Unclosable Gaps](meta-analysis/unclosable-gaps.md) | The 5 mechanical gaps that cannot be closed by automation |
 
 ---
 
